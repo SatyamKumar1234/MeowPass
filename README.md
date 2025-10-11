@@ -1,6 +1,8 @@
 # MEOWPASS CLI by GgSatyam
 
 A personalized wordlist generator designed for security research, featuring a beautiful CLI, systematic rule-based generation, and an optional AI-enhancement mode.
+rn it checks hardocoded directory to search for data.json so please change that from the code iwill fix it later
+
 
 ## Features
 
@@ -37,4 +39,5 @@ Once published, you can install MEOWPASS directly:
 pip install meowpass-cli
 
 # To include AI features
+
 pip install meowpass-cli[ai]
