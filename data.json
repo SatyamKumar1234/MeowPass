@@ -1,0 +1,100 @@
+{
+  "name": [
+    "alex",
+    "jordan",
+    "casey",
+    "morgan",
+    "taylor",
+    "cameron"
+  ],
+  "username": [
+    "ace",
+    "cyber",
+    "shadow",
+    "phantom",
+    "byte",
+    "glitch",
+    "hunter",
+    "phoenix"
+  ],
+  "dob_year": [
+    "1990",
+    "1995",
+    "1998",
+    "2000",
+    "2001",
+    "2003"
+  ],
+  "dob_full": [
+    "10031990",
+    "15071995",
+    "22111998",
+    "01052000"
+  ],
+  "pet_names": [
+    "buddy",
+    "luna",
+    "max",
+    "bella",
+    "shadow",
+    "smokey",
+    "zeus",
+    "milo"
+  ],
+  "family_names": [
+    "smith",
+    "patel",
+    "jones",
+    "kumar",
+    "khan"
+  ],
+  "hobbies": [
+    "gaming",
+    "coding",
+    "hacking",
+    "music",
+    "football",
+    "soccer",
+    "anime",
+    "movies",
+    "gym",
+    "art",
+    "travel"
+  ],
+  "technical_keywords": [
+    "root",
+    "admin",
+    "password",
+    "secret",
+    "exploit",
+    "script",
+    "server",
+    "network",
+    "system",
+    "kernel",
+    "kali"
+  ],
+  "favorite_colors": [
+    "blue",
+    "green",
+    "black",
+    "red",
+    "purple",
+    "white",
+    "cyan",
+    "silver"
+  ],
+  "other_keywords": [
+    "love",
+    "money",
+    "king",
+    "master",
+    "legend",
+    "dream",
+    "secret",
+    "alpha",
+    "omega",
+    "winter",
+    "dragon"
+  ]
+}

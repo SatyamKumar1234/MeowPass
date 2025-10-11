@@ -1,0 +1,2 @@
+[console_scripts]
+meowpass = meowpass.cli:main

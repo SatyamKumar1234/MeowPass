@@ -1,0 +1,6 @@
+rich
+art
+
+[ai]
+openai
+google-generativeai

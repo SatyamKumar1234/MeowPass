@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "meowpass-cli"
+version = "2.0.0"
+authors = [ { name="GgSatyam" } ]
+description = "A personalized wordlist generator for security research."
+requires-python = ">=3.8"
+readme = "README.md"
+# Core dependencies that are ALWAYS required for the CLI to run.
+dependencies = [
+    "rich",
+    "art",
+]
+
+[project.optional-dependencies]
+# Optional dependencies that users can install for AI features.
+# A user could install these with: pip install meowpass-cli[ai]
+ai = [
+    "openai",
+    "google-generativeai",
+]
+
+[project.scripts]
+# This creates the 'meowpass' command that runs the main function in cli.py
+meowpass = "meowpass.cli:main"
