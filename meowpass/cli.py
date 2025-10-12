@@ -11,49 +11,33 @@ from .core import load_data, generate_base_words, apply_mangling_rules, enhance_
 
 console = Console()
 
-def check_and_install_ai_deps():
-    """Checks for AI libraries and prompts the user to install them if missing."""
-    packages = {
-        'google-generativeai': 'Google Gemini',
-        'openai': 'OpenRouter'
-    }
-    missing_packages = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
-    
-    if not missing_packages: return True
+# --- Utility Functions (unchanged) ---
+def is_sensitive_path(path):
+    abs_path = os.path.abspath(path).lower()
+    sensitive_paths = ([os.path.normpath(p).lower() for p in ['c:/windows', 'c:/program files', 'c:/users']] if sys.platform == "win32" else ['/etc', '/usr', '/bin', '/sbin', '/root', '/boot', '/dev', '/sys'])
+    for sensitive in sensitive_paths:
+        if abs_path.startswith(sensitive): return True
+    return False
 
-    console.print(Panel(
-        f"[bold yellow]To use AI-Assisted Mode, the following are needed:[/bold yellow]\n- " + 
-        "\n- ".join([f"[cyan]{pkg}[/cyan]" for pkg in missing_packages]),
-        title="Optional Dependencies Missing", border_style="yellow"
-    ))
-    
+def check_and_install_ai_deps():
+    # ... (This function remains unchanged) ...
+    packages = { 'google-generativeai': 'Google Gemini', 'openai': 'OpenRouter' }
+    missing_packages = [pkg for pkg in packages if importlib.util.find_spec(pkg) is None]
+    if not missing_packages: return True
+    console.print(Panel(f"[bold yellow]To use AI-Assisted Mode, the following are needed:[/bold yellow]\n- " + "\n- ".join([f"[cyan]{pkg}[/cyan]" for pkg in missing_packages]), title="Optional Dependencies Missing", border_style="yellow"))
     if console.input("[bold]Install them now? (y/n): [/bold]").lower() != 'y':
-        console.print("[red]Installation declined. Cannot proceed with AI-Assisted Mode.[/red]")
-        return False
-        
+        console.print("[red]Installation declined. Cannot proceed with AI-Assisted Mode.[/red]"); return False
     for pkg in missing_packages:
         with console.status(f"[bold green]Installing {pkg}...[/]"):
             try:
                 subprocess.run([sys.executable, "-m", "pip", "install", pkg], check=True, capture_output=True)
                 console.print(f"-> [green]Successfully installed {pkg}.[/green]")
-            except subprocess.CalledProcessError as e:
-                console.print(Panel(f"[bold red]Failed to install {pkg}.[/bold red]", title="Installation Error", border_style="red"))
-                return False
-    console.print("[green]All AI dependencies are installed![/green]")
-    return True
-
-def is_sensitive_path(path):
-    abs_path = os.path.abspath(path).lower()
-    sensitive_paths = (
-        [os.path.normpath(p).lower() for p in ['c:/windows', 'c:/program files', 'c:/users']] 
-        if sys.platform == "win32" else 
-        ['/etc', '/usr', '/bin', '/sbin', '/root', '/boot', '/dev', '/sys']
-    )
-    for sensitive in sensitive_paths:
-        if abs_path.startswith(sensitive): return True
-    return False
+            except subprocess.CalledProcessError:
+                console.print(Panel(f"[bold red]Failed to install {pkg}.[/bold red]", title="Installation Error", border_style="red")); return False
+    console.print("[green]All AI dependencies are installed![/green]"); return True
 
 def save_wordlist(wordlist, base_filename):
+    # ... (This function remains unchanged) ...
     console.print(Panel(f"The wordlist contains [cyan]{len(wordlist)}[/cyan] passwords.", title="Ready to Save"))
     console.print("\n[bold]Save location?[/bold] (1) Current directory (default) (2) Custom directory")
     choice = console.input("[bold]Enter choice: [/bold]")
@@ -65,8 +49,7 @@ def save_wordlist(wordlist, base_filename):
                 console.print("[yellow]Directory does not exist.[/yellow]"); continue
             if is_sensitive_path(custom_dir):
                 console.print(Panel("[bold red]SECURITY WARNING: Not allowed.[/bold red]", title="Warning", border_style="red")); continue
-            save_path = os.path.join(custom_dir, base_filename)
-            break
+            save_path = os.path.join(custom_dir, base_filename); break
     else:
         save_path = os.path.join(os.getcwd(), base_filename)
     try:
@@ -77,9 +60,33 @@ def save_wordlist(wordlist, base_filename):
         console.print(Panel(f"[bold red]Failed to save file:[/bold red] {e}", title="Error", border_style="red"))
 
 def main():
+    """The main function for the MEOWPASS CLI."""
     os.system('cls' if os.name == 'nt' else 'clear')
     tprint("MEOWPASS", font="block", chr_ignore=True)
     console.print("[bold cyan]                                by GgSatyam[/bold cyan]")
+    
+    # --- NEW: Interactive Data File Prompt at Startup ---
+    console.print(Panel("First, MEOWPASS needs to know where your target's information is located.", title="Data Source", border_style="yellow"))
+    console.print("[bold]Where is your data.json file?[/bold]")
+    console.print("  (1) In the current directory (default)")
+    console.print("  (2) Let me specify a different file path")
+    path_choice = console.input("[bold]Enter choice: [/bold]")
+    
+    data_file_path = "data.json"
+    if path_choice == '2':
+        data_file_path = console.input("[cyan]Enter the full path to your data file: [/cyan]")
+
+    # --- NEW: "Fail-Fast" Data Loading ---
+    user_data = load_data(data_file_path)
+    if user_data is None:
+        console.print(Panel(f"[bold red]ERROR: Data file not found at '{data_file_path}'.[/bold red]\nPlease check the path and run the tool again.", title="File Error", border_style="red")); return
+    if user_data == "JSON_ERROR":
+        console.print(Panel(f"[bold red]ERROR: The file '{data_file_path}' is corrupt.[/bold red]\nPlease check the file for JSON syntax errors.", title="File Error", border_style="red")); return
+    
+    # If we get here, the data has been loaded successfully!
+    console.print(f"-> [green]Successfully loaded data from '{data_file_path}'[/green]")
+    
+    # --- Original Menu Logic (now that data is loaded) ---
     console.print(Panel("A personalized wordlist generator for security research.", title="Welcome", border_style="green"))
     console.print("\n[bold]Choose a mode:[/bold]\n  [cyan](1) Normal[/cyan]\n  [magenta](2) AI-Assisted[/magenta]\n  (3) Quit")
     choice = console.input("[bold]Enter choice: [/bold]")
@@ -88,13 +95,6 @@ def main():
         console.print("\n[bold yellow]Exiting MEOWPASS. Goodbye![/bold yellow]"); return
         
     if choice in ['1', '2']:
-        # Hardcoded path to the data.json file as requested.
-        data_path = "d:\\VS Code\\vs code codefiles\\meowpass-project\\data.json"
-
-        user_data = load_data(data_path)
-        if user_data is None: console.print(Panel(f"[bold red]ERROR: File not found at the hardcoded path '[cyan]{data_path}[/cyan]'. Please ensure the file exists.[/bold red]", title="File Error", border_style="red")); return
-        if user_data == "JSON_ERROR": console.print(Panel(f"[bold red]ERROR: The file at '[cyan]{data_path}[/cyan]' is corrupt.[/bold red]", title="File Error", border_style="red")); return
-
         console.print("\n[bold yellow]Step 1: Generating base words...[/bold yellow]")
         base_words = generate_base_words(user_data)
         
