@@ -27,7 +27,7 @@ def apply_mangling_rules(words):
     common_years = ["1990", "1995", "1999", "2000", "2001", "2010", "2020", "2023", "2024"]
     common_symbols = ['!', '@', '#', '$', '%', '&', '*', '?']
     l33t_map = {'a': '@', 'e': '3', 'i': '1', 'l': '1', 'o': '0', 's': '$'}
-    words_to_mangle = random.sample(words, min(len(words), 500))
+    words_to_mangle = words[:min(len(words), 500)]
 
     for word in words_to_mangle:
         variations = {word, word.capitalize(), word.upper()}
@@ -57,7 +57,7 @@ def enhance_with_ai(base_wordlist, data, console, provider_choice, api_key, num_
             import google.generativeai as genai
             with console.status("[bold green]Contacting Google Gemini API...[/]"):
                 genai.configure(api_key=api_key)
-                model = genai.GenerativeModel('gemini-pro')
+                model = genai.GenerativeModel('gemini-2.5-flash-lite-preview-09-2025')
                 response = model.generate_content(prompt)
                 ai_passwords_text = response.text
                 ai_generated_passwords = [p.strip() for p in ai_passwords_text.split(',')]
