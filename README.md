@@ -1,7 +1,7 @@
 # MEOWPASS CLI by GgSatyam
 
 A personalized wordlist generator designed for security research, featuring a beautiful CLI, systematic rule-based generation, and an optional AI-enhancement mode.
-rn it checks hardocoded directory to search for data.json so please change that from the code iwill fix it later
+ 
 
 
 ## Features
@@ -11,6 +11,12 @@ rn it checks hardocoded directory to search for data.json so please change that 
 -   **AI-Assisted Mode:** Enhances the wordlist with creative, human-like password guesses using Google Gemini or OpenRouter.
 -   **Smart Dependencies:** Prompts to install optional AI libraries only when needed.
 -   **Safe and Flexible:** Includes checks to prevent saving files in sensitive directories and allows you to choose your save location.
+##VERSION
+V1
+V2-ADDED option to change name of output file and converted the output from json to text.
+   now default directory is dekstop to search for data.json file
+thats it this ai generated stuff is good but it is complex new version will never come most probably .
+
 
 ## Installation from GitHub
 
@@ -41,3 +47,4 @@ pip install meowpass-cli
 # To include AI features
 
 pip install meowpass-cli[ai]
+
