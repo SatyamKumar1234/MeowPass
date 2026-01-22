@@ -13,7 +13,8 @@ A personalized wordlist generator designed for security research, featuring a be
 -   **Safe and Flexible:** Includes checks to prevent saving files in sensitive directories and allows you to choose your save location.
 ##VERSION
 V1
-V2-ADDED option to change name of output file and converted the output from json to text.
+
+- **V2-ADDED option to change name of output file and converted the output from json to text.
    now default directory is dekstop to search for data.json file
 thats it this ai generated stuff is good but it is complex new version will never come most probably .
 
@@ -47,4 +48,5 @@ pip install meowpass-cli
 # To include AI features
 
 pip install meowpass-cli[ai]
+
 
